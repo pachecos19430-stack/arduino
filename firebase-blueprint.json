@@ -1,0 +1,224 @@
+{
+  "entities": {
+    "user": {
+      "title": "UserProfile",
+      "description": "User profile and role settings",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "format": "email", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "photoURL": { "type": "string", "maxLength": 1024 },
+        "role": { "type": "string", "enum": ["admin", "maker", "developer", "viewer"] },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "bio": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["id", "email", "displayName", "role", "createdAt"]
+    },
+    "board": {
+      "title": "Board",
+      "description": "Microcontroller board specification",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "family": { "type": "string", "enum": ["arduino", "esp32", "esp8266", "raspberry_pi_pico", "stm32", "other"] },
+        "microcontroller": { "type": "string", "maxLength": 128 },
+        "operatingVoltage": { "type": "string", "enum": ["5V", "3.3V", "dual"] },
+        "digitalPins": { "type": "number" },
+        "analogPins": { "type": "number" },
+        "pwmPins": { "type": "number" },
+        "hasWifi": { "type": "boolean" },
+        "hasBluetooth": { "type": "boolean" },
+        "clockSpeedMhz": { "type": "number" },
+        "flashMemoryKb": { "type": "number" },
+        "pinoutMap": { "type": "array" },
+        "imageUrl": { "type": "string", "maxLength": 1024 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "family", "microcontroller", "operatingVoltage", "createdAt"]
+    },
+    "component": {
+      "title": "ComponentCatalogItem",
+      "description": "Electronic component and sensor catalog item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "category": { "type": "string", "enum": ["sensor", "actuator", "display", "input", "power", "communication", "passive"] },
+        "model": { "type": "string", "maxLength": 128 },
+        "operatingVoltage": { "type": "string", "maxLength": 64 },
+        "protocol": { "type": "string", "enum": ["digital", "analog", "i2c", "spi", "uart", "pwm", "gpio"] },
+        "defaultPins": { "type": "array" },
+        "description": { "type": "string", "maxLength": 1000 },
+        "datasheetUrl": { "type": "string", "maxLength": 1024 },
+        "iconName": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "name", "category", "model", "operatingVoltage", "protocol", "createdAt"]
+    },
+    "project": {
+      "title": "Project",
+      "description": "Hardware engineering project",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 128 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "status": { "type": "string", "enum": ["planning", "prototyping", "testing", "deployed", "archived"] },
+        "boardId": { "type": "string", "maxLength": 128 },
+        "tags": { "type": "array" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 },
+        "notes": { "type": "string", "maxLength": 5000 },
+        "isFavorite": { "type": "boolean" }
+      },
+      "required": ["id", "userId", "name", "status", "boardId", "createdAt", "updatedAt"]
+    },
+    "projectComponent": {
+      "title": "ProjectComponent",
+      "description": "Component assigned to a project",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "projectId": { "type": "string", "maxLength": 128 },
+        "componentCatalogId": { "type": "string", "maxLength": 128 },
+        "customLabel": { "type": "string", "maxLength": 128 },
+        "quantity": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "addedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "projectId", "componentCatalogId", "customLabel", "quantity", "addedAt"]
+    },
+    "connection": {
+      "title": "Connection",
+      "description": "Pin wiring link between board and component",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "projectId": { "type": "string", "maxLength": 128 },
+        "projectComponentId": { "type": "string", "maxLength": 128 },
+        "boardPin": { "type": "string", "maxLength": 64 },
+        "componentPin": { "type": "string", "maxLength": 64 },
+        "signalType": { "type": "string", "enum": ["digital_in", "digital_out", "analog_in", "pwm", "i2c_sda", "i2c_scl", "power_vcc", "ground"] },
+        "wireColor": { "type": "string", "maxLength": 32 },
+        "resistorOhm": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "projectId", "projectComponentId", "boardPin", "componentPin", "signalType", "wireColor", "createdAt"]
+    },
+    "testPlan": {
+      "title": "TestPlan",
+      "description": "Validation test routine for hardware/signals",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "projectId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 128 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "targetComponentId": { "type": "string", "maxLength": 128 },
+        "expectedOutcome": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["pending", "in_progress", "passed", "failed"] },
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "critical"] },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "projectId", "title", "expectedOutcome", "status", "severity", "createdAt", "updatedAt"]
+    },
+    "testResult": {
+      "title": "TestResult",
+      "description": "Recorded result and physical measurements of a test",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "testId": { "type": "string", "maxLength": 128 },
+        "projectId": { "type": "string", "maxLength": 128 },
+        "executedBy": { "type": "string", "maxLength": 128 },
+        "executedAt": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["passed", "failed", "inconclusive"] },
+        "observedOutcome": { "type": "string", "maxLength": 1000 },
+        "voltageMeasured": { "type": "number" },
+        "signalVerified": { "type": "boolean" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "durationMs": { "type": "number" }
+      },
+      "required": ["id", "testId", "projectId", "executedBy", "executedAt", "status", "observedOutcome"]
+    },
+    "telemetry": {
+      "title": "TelemetryDataPoint",
+      "description": "Time series telemetry data points",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "projectId": { "type": "string", "maxLength": 128 },
+        "boardId": { "type": "string", "maxLength": 128 },
+        "timestamp": { "type": "string", "maxLength": 64 },
+        "metric": { "type": "string", "maxLength": 64 },
+        "value": { "type": "number" },
+        "unit": { "type": "string", "maxLength": 32 },
+        "simulated": { "type": "boolean" }
+      },
+      "required": ["id", "projectId", "boardId", "timestamp", "metric", "value", "unit"]
+    },
+    "log": {
+      "title": "SystemLog",
+      "description": "Audit and hardware activity logs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "projectId": { "type": "string", "maxLength": 128 },
+        "level": { "type": "string", "enum": ["info", "warn", "error", "debug"] },
+        "module": { "type": "string", "enum": ["hardware", "pins", "component", "test", "firmware_stub", "system"] },
+        "message": { "type": "string", "maxLength": 1000 },
+        "details": { "type": "string", "maxLength": 2000 },
+        "timestamp": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "level", "module", "message", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "user",
+      "description": "Registered maker and engineer user profiles"
+    },
+    "/boards/{boardId}": {
+      "schema": "board",
+      "description": "Microcontroller board definitions"
+    },
+    "/components/{componentId}": {
+      "schema": "component",
+      "description": "Sensor and electronic component catalog"
+    },
+    "/projects/{projectId}": {
+      "schema": "project",
+      "description": "Maker projects and firmware designs"
+    },
+    "/projectComponents/{projectComponentId}": {
+      "schema": "projectComponent",
+      "description": "Components mapped to active projects"
+    },
+    "/connections/{connectionId}": {
+      "schema": "connection",
+      "description": "Breadboard and microcontroller pin connections"
+    },
+    "/tests/{testId}": {
+      "schema": "testPlan",
+      "description": "Verification test plans"
+    },
+    "/testResults/{testResultId}": {
+      "schema": "testResult",
+      "description": "Recorded execution runs and test results"
+    },
+    "/telemetry/{telemetryId}": {
+      "schema": "telemetry",
+      "description": "Live and simulated telemetry streams"
+    },
+    "/logs/{logId}": {
+      "schema": "log",
+      "description": "Chronological audit logs of project actions"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "MicroLab2",
+  "description": "Plataforma de gestión y laboratorio para proyectos de Arduino, ESP32 y microcontroladores",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
